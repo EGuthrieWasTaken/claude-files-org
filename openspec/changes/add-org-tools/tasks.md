@@ -70,7 +70,7 @@ Implementation order for `add-org-tools`. Work on branch `claude/add-org-tools`,
   - version check.
 
   Verify: `actionlint` and `shellcheck` are clean, and every job's commands pass locally.
-- [ ] 12.2 Add `.github/scripts/check-version.sh` (reads `claude_files_org/__init__.py`, PR mode refuses an existing git tag, release mode checks tag equality and GHCR) and `.github/workflows/release.yml` (amd64+arm64, `:X.Y.Z` plus `:latest`, `GITHUB_TOKEN`, refuses an existing tag), adapted from claude-files. Verify: script cases tested locally (pass, existing tag, mismatched release tag), and actionlint is clean.
+- [x] 12.2 Add `.github/scripts/check-version.sh` (reads `claude_files_org/__init__.py`, PR mode refuses an existing git tag, release mode checks tag equality and GHCR) and `.github/workflows/release.yml` (amd64+arm64, `:X.Y.Z` plus `:latest`, `GITHUB_TOKEN`, refuses an existing tag), adapted from claude-files. Verify: script cases tested locally (pass, existing tag, mismatched release tag), and actionlint is clean.
 
 ## 13. Integration and hand-off
 

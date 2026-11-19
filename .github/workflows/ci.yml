@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  unit-and-oracle:
+    name: unit + oracle (Emacs 29.3 / org 9.6.15)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install Emacs and test dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y emacs-nox shellcheck
+          python -m pip install -r requirements-dev.txt
+      - name: Oracle pin
+        run: |
+          emacs --batch -Q --eval "(progn (require 'org) (princ (format \"%s org %s\n\" emacs-version (org-version))))" | tee /dev/stderr | grep -qx "29.3 org 9.6.15"
+      - name: shellcheck
+        run: shellcheck .github/scripts/*.sh
+      - name: pytest
+        run: python -m pytest -q --ignore=tests/integration
+
+  version:
+    name: version check
+    runs-on: ubuntu-24.04
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+      - name: Version has never been released
+        run: .github/scripts/check-version.sh pr
