@@ -9,9 +9,9 @@ Implementation order for `add-org-tools`. Work on branch `claude/add-org-tools`,
 
 ## 2. Configuration and timestamps
 
-- [ ] 2.1 Implement `ORG_*` settings with the defaults from design.md Decision 6. Keyword sequences parse `(@)` note flags and `|`, tag groups use `parent=child` syntax, and every value is validated (unknown timezone, file outside the folder, bad sequence). Verify: unit tests cover each default and each refusal message (org-tools-deployment: settings validated at startup).
-- [ ] 2.2 Implement org timestamp reading and writing: active and inactive forms, optional `H:MM` or `HH:MM` time, time ranges, English day abbreviations, repeater/warning cookies detected (for refusal) but never written, and "now" and "today" in `ORG_TIMEZONE`. Verify: unit tests, including the Indiana-evening scenario (org-write-safety) and single-digit hours (`9:30`) read and written back unchanged.
-- [ ] 2.3 Document every `ORG_*` setting in `README.md` (a table matching design.md Decision 6). Verify: the table lists exactly the variables the config module reads.
+- [x] 2.1 Implement `ORG_*` settings with the defaults from design.md Decision 6. Keyword sequences parse `(@)` note flags and `|`, tag groups use `parent=child` syntax, and every value is validated (unknown timezone, file outside the folder, bad sequence). Verify: unit tests cover each default and each refusal message (org-tools-deployment: settings validated at startup).
+- [x] 2.2 Implement org timestamp reading and writing: active and inactive forms, optional `H:MM` or `HH:MM` time, time ranges, English day abbreviations, repeater/warning cookies detected (for refusal) but never written, and "now" and "today" in `ORG_TIMEZONE`. Verify: unit tests, including the Indiana-evening scenario (org-write-safety) and single-digit hours (`9:30`) read and written back unchanged.
+- [x] 2.3 Document every `ORG_*` setting in `README.md` (a table matching design.md Decision 6). Verify: the table lists exactly the variables the config module reads.
 
 ## 3. Parser, item model and identity
 
