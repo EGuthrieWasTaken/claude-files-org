@@ -26,9 +26,9 @@ Implementation order for `add-org-tools`. Work on branch `claude/add-org-tools`,
 
 ## 5. Query tools logic
 
-- [ ] 5.1 Implement list-items filtering (state, tags with inheritance and groups, scheduled and deadline ranges, overdue, text, limit plus a total count) and the result shape from org-item-query. Verify: unit tests for each scenario of "List items with filters".
-- [ ] 5.2 Implement get-item detail, with the logbook parsed into entries (state, rescheduled, not-scheduled, new-deadline, removed-deadline, note, unknown) and child summaries. Verify: unit tests for "Get one item in full", including `not_found`.
-- [ ] 5.3 Implement lint checks for every problem listed in org-item-query's lint requirement. Verify: unit tests with one fixture per problem, and an empty result on a clean fixture.
+- [x] 5.1 Implement list-items filtering (state, tags with inheritance and groups, scheduled and deadline ranges, overdue, text, limit plus a total count) and the result shape from org-item-query. Verify: unit tests for each scenario of "List items with filters".
+- [x] 5.2 Implement get-item detail, with the logbook parsed into entries (state, rescheduled, not-scheduled, new-deadline, removed-deadline, note, unknown) and child summaries. Verify: unit tests for "Get one item in full", including `not_found`.
+- [x] 5.3 Implement lint checks for every problem listed in org-item-query's lint requirement. Verify: unit tests with one fixture per problem, and an empty result on a clean fixture.
 
 ## 6. Edit engine and state changes
 
