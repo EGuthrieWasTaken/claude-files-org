@@ -7,7 +7,7 @@ Ships the org tools as a drop-in replacement image for the Emacs Files container
 ## ADDED Requirements
 
 ### Requirement: Drop-in derived image
-The image `ghcr.io/eguthriewastaken/claude-files-org` SHALL be built `FROM` a pinned `ghcr.io/eguthriewastaken/claude-files` tag, 1.3.0 or later, and SHALL load the tools via `EXTRA_TOOL_MODULES`. Every base setting (env vars, port, tokens, `/mcp` path, volumes, health check, non-root user, read-only rootfs support) SHALL work unchanged.
+The image `ghcr.io/eguthriewastaken/claude-files-org` SHALL be built `FROM` a pinned `ghcr.io/eguthriewastaken/claude-files` tag, 1.4.0 or later, and SHALL load the tools via `EXTRA_TOOL_MODULES`. Every base setting (env vars, port, tokens, `/mcp` path, volumes, health check, non-root user, read-only rootfs support) SHALL work unchanged.
 
 #### Scenario: Swap the image
 - **WHEN** the Emacs Files container's image is changed from `claude-files` to `claude-files-org`, with no other change

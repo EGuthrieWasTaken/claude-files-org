@@ -2,7 +2,7 @@
 
 ## Context
 
-- **Host server.** claude-files 1.3.0 loads modules named in `EXTRA_TOOL_MODULES` and calls `register(api)`; the contract is in claude-files `docs/extensions.md`. `api` provides:
+- **Host server.** claude-files 1.4.0 (extension API v1, unchanged since it arrived in 1.3.0) loads modules named in `EXTRA_TOOL_MODULES` and calls `register(api)`; the contract is in claude-files `docs/extensions.md`. `api` provides:
   - `api.vault`: path-contained reads, and atomic writes under the worktree gate;
   - `api.add_tool(fn, read_only=...)`: write tools are refused for read-only tokens before `fn` runs;
   - `api.guard` and `api.run_in_thread`;
@@ -23,7 +23,7 @@
   - capture template `t`.
 
   The exact output formats used in the specs (state lines, reschedule and deadline logs, notes, tag column 77, `:Effort:   0:45`, archive properties including `ARCHIVE_ITAGS`, cookie updates, capture placement) were confirmed in Emacs 29.3 / org 9.6.15 batch runs while writing this change.
-- **Access constraints.** Both repositories and both GHCR packages are private. GitHub-hosted CI here can only pull `ghcr.io/eguthriewastaken/claude-files:1.3.0` once the package is public, or has granted `claude-files-org` Actions read access. GNU ELPA is not reachable from the agent sandbox, but is reachable from GitHub runners.
+- **Access constraints.** `claude-files` and its image `ghcr.io/eguthriewastaken/claude-files` are public, so CI here pulls the base image without credentials. `claude-files-org` itself is private. The agent sandbox cannot reach GHCR's blob host (`pkg-containers.githubusercontent.com`) or GNU ELPA; GitHub runners can reach both. Locally, the base image is built from a claude-files `v1.4.0` checkout instead of pulled.
 
 ## Goals / Non-Goals
 
@@ -68,9 +68,9 @@ Oracle tests run each operation twice on the same fixture: once through the tool
 
 ### 5. Three test layers, each runnable locally
 - **Unit and oracle** (`pytest`, plus Emacs): pure Python, plus the Emacs comparisons.
-- **In-process integration:** the real claude-files 1.3.0 app with `EXTRA_TOOL_MODULES=claude_files_org`, driven through `/mcp` with a `TestClient` and rw/ro tokens, following claude-files' `tests/extension_tests.py` pattern.
+- **In-process integration:** the real claude-files 1.4.0 app with `EXTRA_TOOL_MODULES=claude_files_org`, driven through `/mcp` with a `TestClient` and rw/ro tokens, following claude-files' `tests/extension_tests.py` pattern.
   - In CI, the app code and its `requirements*.txt` come out of the pinned base image (`docker create` + `docker cp /srv/app`).
-  - Locally, they come from a claude-files checkout at `v1.3.0`.
+  - Locally, they come from a claude-files checkout at `v1.4.0`.
 - **Container smoke test:** build the derived image and run it as production does:
   - `--read-only --tmpfs /tmp --cap-drop ALL --security-opt no-new-privileges`, bind-mounting a fixture folder;
   - `tools/list`;
@@ -104,7 +104,7 @@ All variables are validated at import time, so a bad value stops the server from
   - modules cover config, timestamps, the parser/model, ids, edits, archive, lint and tools.
 - No runtime dependencies beyond the standard library.
 - The `Dockerfile` does four things:
-  - starts `FROM ghcr.io/eguthriewastaken/claude-files:1.3.0`;
+  - starts `FROM ghcr.io/eguthriewastaken/claude-files:1.4.0`;
   - `COPY`s the package to `/srv/claude_files_org/` (uvicorn runs from `/srv`, so it is importable);
   - byte-compiles it as root, then returns to `USER 1000:1000`;
   - sets `ENV EXTRA_TOOL_MODULES=claude_files_org`.
@@ -119,13 +119,13 @@ All variables are validated at import time, so a bad value stops the server from
 
 - **Oracle org version ≠ Ethan's org version** (his elpaca build is likely 9.7.x), so formats could differ in edge cases. → The pin is one line in CI. The formats the specs rely on are long-stable in org, and the open question below tracks confirming his version.
 - **Hand-written parser misreads an unusual construct** (inline tasks, `#+BEGIN_SRC` blocks containing `* `-prefixed lines, CRLF). → Lines inside `#+BEGIN_…`/`#+END_…` blocks are never treated as headlines. The round-trip property test runs on every fixture, plus a local-only round trip of the real `inbox.org` and its archive. The runtime diff guard (Decision 2) refuses anything unexpected.
-- **CI cannot pull the private base image.** → A documented prerequisite (Migration Plan step 0). Until it is met, the CI job that needs the image fails with a message naming the fix. Unit and oracle jobs don't need the image and still run.
+- **The base image becomes unpullable** (made private again, or GHCR down). → The CI job that needs it fails with a message naming the image and the access fix. Unit and oracle jobs don't need the image and still run.
 - **`id` instability for duplicate titles.** → Documented. It fails safe (Decision 3).
 - **An agent bypasses the tools with `write_file`.** → Out of scope to forbid. The server instructions and the Emacs repo's `CLAUDE.md` both point agents at the tools.
 
 ## Migration Plan
 
-0. **Before CI can go fully green:** make `ghcr.io/eguthriewastaken/claude-files` public, or in its package settings → Manage Actions access, add `claude-files-org` with Read.
+0. *(Done 2026-11-19.)* `ghcr.io/eguthriewastaken/claude-files` is public, so CI pulls the base image without credentials.
 1. Review and merge the implementation PR. Publish release `v0.1.0`, which builds and pushes the image.
 2. Make the `claude-files-org` package public, or log the unRAID host in to GHCR.
 3. Change the Emacs Files container's Repository to `ghcr.io/eguthriewastaken/claude-files-org:latest`, keeping every other setting. Verify that `tools/list` shows the `org_*` tools and that `org_list_items` returns the open items.
