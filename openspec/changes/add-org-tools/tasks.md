@@ -15,10 +15,10 @@ Implementation order for `add-org-tools`. Work on branch `claude/add-org-tools`,
 
 ## 3. Parser, item model and identity
 
-- [ ] 3.1 Implement the line-preserving parser. It finds headlines (never inside `#+BEGIN_…`/`#+END_…` blocks), keyword (honoring `#+TODO:`), title, cookie and tags, the planning line, property and logbook drawers (with org's placement rules), the body and children. Verify: unit tests for each fixture shape, including the no-keyword heading and the preamble scenarios (org-item-query).
-- [ ] 3.2 Implement tag inheritance and group expansion, and the open/closed classification. Verify: unit tests for the inherited-tags and tag-group scenarios.
-- [ ] 3.3 Implement `id` and `rev` per design.md Decision 3. Verify: unit tests for every org-item-query identity scenario (unrelated insert, cookie change, duplicate titles, child edit leaves parent rev).
-- [ ] 3.4 Add the round-trip property test: parse and render every fixture with no edit, and assert byte identity. Add an opt-in test, skipped unless `ORG_ROUNDTRIP_FILES` names local files, that does the same for real files. Verify: the fixture round trip passes in `pytest`. If the real `inbox.org` and archive were downloaded locally (see guidance), the opt-in test passes on them too.
+- [x] 3.1 Implement the line-preserving parser. It finds headlines (never inside `#+BEGIN_…`/`#+END_…` blocks), keyword (honoring `#+TODO:`), title, cookie and tags, the planning line, property and logbook drawers (with org's placement rules), the body and children. Verify: unit tests for each fixture shape, including the no-keyword heading and the preamble scenarios (org-item-query).
+- [x] 3.2 Implement tag inheritance and group expansion, and the open/closed classification. Verify: unit tests for the inherited-tags and tag-group scenarios.
+- [x] 3.3 Implement `id` and `rev` per design.md Decision 3. Verify: unit tests for every org-item-query identity scenario (unrelated insert, cookie change, duplicate titles, child edit leaves parent rev).
+- [x] 3.4 Add the round-trip property test: parse and render every fixture with no edit, and assert byte identity. Add an opt-in test, skipped unless `ORG_ROUNDTRIP_FILES` names local files, that does the same for real files. Verify: the fixture round trip passes in `pytest`. If the real `inbox.org` and archive were downloaded locally (see guidance), the opt-in test passes on them too.
 
 ## 4. Oracle harness
 
