@@ -27,7 +27,7 @@
       org-adapt-indentation nil
       org-archive-location "~/.emacs.d/org-projects/archive/%s_archive::"
       org-archive-subtree-save-file-p nil
-      org-tag-alist '(("stephen") ("jwa") ("research") ("coursework") ("admin") (:startgroup) ("personal") (:grouptags) ("blog") (:endgroup))
+      org-tag-alist '(("stephen") ("jwa") ("research") ("coursework") ("admin") (:startgrouptag) ("personal") (:grouptags) ("blog") (:endgrouptag))
       make-backup-files nil
       auto-save-default nil
       create-lockfiles nil)
@@ -104,7 +104,7 @@
 
 (defun oracle--op-set-effort (args)
   (let ((v (oracle--arg args 'value)))
-    (if v (org-set-property "Effort" v) (org-delete-property "Effort"))))
+    (if v (org-set-effort nil v) (org-delete-property "Effort"))))
 
 (defun oracle--op-archive (_args)
   (org-archive-subtree)

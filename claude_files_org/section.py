@@ -9,7 +9,8 @@ untouched lines exactly as they were (including a trailing ``\\r``).
 import re
 import unicodedata
 
-from .model import (COOKIE_RE, DRAWER_START_RE, END_RE, HEADLINE_RE, OrgError, PLANNING_RE, TAGS_RE)
+from .model import (COOKIE_RE, DRAWER_START_RE, END_RE, HEADLINE_RE, OrgError, PLANNING_RE, PROPERTY_RE,
+                    TAGS_RE)
 
 TAGS_COLUMN = 77
 _KEYS = ("CLOSED", "DEADLINE", "SCHEDULED")
@@ -180,7 +181,7 @@ class Section:
         if i is None:
             return
         core, cr = split_cr(self.lines[i])
-        m = re.search(r"\b" + key + r" +<[^>\n]+>[ \t]*", core)
+        m = re.search(r"\b" + key + r": +<[^>\n]+>[ \t]*", core)
         if not m:
             return
         before, after = core[:m.start()], core[m.end():]
@@ -217,6 +218,45 @@ class Section:
             self.lines.extend(drawer)
 
 
+    # -- properties --------------------------------------------------------
+    def set_property(self, key, value):
+        """``org-set-property``: add or replace ``:KEY:   value`` in the property drawer (created if needed)."""
+        formatted = f"{':' + key + ':':<10} {value}"
+        span = self.props_span()
+        if span:
+            a, b = span
+            for i in range(a + 1, b):
+                pm = PROPERTY_RE.match(self.core(i))
+                if pm and pm.group(1).lower() == key.lower():
+                    self.lines[i] = formatted + split_cr(self.lines[i])[1]
+                    return
+            self.lines.insert(b, self.new_line(formatted))
+            return
+        at = 1 + (1 if self.planning_idx() else 0)
+        block = [self.new_line(x) for x in (":PROPERTIES:", formatted, ":END:")]
+        if at >= len(self.lines) and self.ends_without_newline:
+            self.lines.extend(block + [""])      # org adds the missing final newline
+        else:
+            self.lines[at:at] = block
+
+    def delete_property(self, key):
+        """``org-delete-property``: drop the line, and the whole drawer once it is empty."""
+        span = self.props_span()
+        if not span:
+            return
+        a, b = span
+        for i in range(a + 1, b):
+            pm = PROPERTY_RE.match(self.core(i))
+            if pm and pm.group(1).lower() == key.lower():
+                del self.lines[i]
+                b -= 1
+                break
+        else:
+            return
+        if b == a + 1:
+            del self.lines[a:b + 1]
+
+
 def _drop_entry(text, key):
     m = _KEY_ENTRY[key].search(text)
     if not m:
@@ -235,5 +275,5 @@ def clean_note(note):
         return None
     for line in text.split("\n"):
         if END_RE.match(line.strip()):
-            raise OrgError("bad_argument", "a note line may not be ':END:' (it would close the logbook drawer)")
+            raise OrgError("unsafe_structure", "a note line may not be ':END:': it would close the logbook drawer early")
     return text

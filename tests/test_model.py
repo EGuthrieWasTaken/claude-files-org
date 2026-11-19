@@ -41,10 +41,12 @@ def test_long_headline_with_tags(load, by_title):
 
 
 def test_src_block_contents_are_not_headlines(load, by_title):
+    unescaped = load("src_block_unescaped.org")
+    assert [i.title for i in unescaped.items] == ["Tasks", "with block", "after"]
     doc = load()
-    assert not [i for i in doc.items if "not a headline" in i.title or i.title == "neither is this"]
     assert by_title(doc, "kappa").level == 2
     assert by_title(doc, "Reference").level == 1
+    assert by_title(doc, "iota with src block").end == by_title(doc, "kappa").start
 
 
 def test_section_and_subtree_bounds(load, by_title):

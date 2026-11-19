@@ -129,7 +129,7 @@ def test_note_line_that_would_close_the_drawer_is_refused(load, by_title):
     doc = load()
     with pytest.raises(OrgError) as e:
         run(doc, by_title(doc, "gamma with no planning"), state="WAIT", note="first\n:END:\nsecond")
-    assert e.value.code == "bad_argument"
+    assert e.value.code == "unsafe_structure"
 
 
 def test_repeating_items_are_refused(load, by_title):

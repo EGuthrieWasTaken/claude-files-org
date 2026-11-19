@@ -27,7 +27,12 @@ def engine_apply(home, op, args, now=DEFAULT_NOW, target=TARGET, config=None):
     path = home / ".emacs.d" / target
     raw = path.read_bytes()
     doc = parse(raw.decode("utf-8", "surrogateescape"), cfg, path.name)
-    item = find_item(doc, args["path"], args.get("nth", 0)) if "path" in args else None
+    if op == "add-item":
+        item = find_item(doc, args.get("parent", "Tasks"), args.get("parent_nth", 0))
+    else:
+        item = find_item(doc, args["path"], args.get("nth", 0)) if "path" in args else None
+    if op == "add-item":
+        args = _structured_add_args(args)
     T.set_clock(frozen(now))
     try:
         res = edits.run_oracle_op(doc, op.replace("-", "_"), item, args, home=home)
@@ -39,3 +44,14 @@ def engine_apply(home, op, args, now=DEFAULT_NOW, target=TARGET, config=None):
         p.parent.mkdir(parents=True, exist_ok=True)
         p.write_bytes(text.encode("utf-8", "surrogateescape"))
     return read_tree(home)
+
+
+def _structured_add_args(args):
+    """Oracle args carry the planning line as literal text; the engine wants dates."""
+    import re
+    out = dict(args)
+    plan = out.pop("planning", None)
+    if plan:
+        for key, ts in re.findall(r"(SCHEDULED|DEADLINE): <(\d{4}-\d{2}-\d{2})[^>]*>", plan):
+            out[key.lower()] = ts
+    return out

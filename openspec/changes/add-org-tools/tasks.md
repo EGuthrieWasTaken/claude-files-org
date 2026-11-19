@@ -37,9 +37,9 @@ Implementation order for `add-org-tools`. Work on branch `claude/add-org-tools`,
 
 ## 7. Schedule, deadline, notes, tags, effort and new items
 
-- [ ] 7.1 Implement `reschedule` and `set_deadline` (set, change, remove, same-date no-op, time and range, optional note continuation) and the repeater refusal. Verify: oracle tests for each scenario in org-item-editing's reschedule and deadline requirements, and a unit test for `repeater_unsupported`.
-- [ ] 7.2 Implement `add_note` (single and multi-line) and `set_tags` (validation, org's column-77 alignment, long headline, remove). Verify: oracle tests for the note, aligned tags, long-headline tags and tag removal, and a unit test for `unknown_tag`.
-- [ ] 7.3 Implement `set_effort` (set, replace, remove, drawer creation under the planning line, `bad_effort`, warning off the preferred list) and `add_item` (capture-equivalent placement under the inbox heading or a parent, CREATED, optional tags, planning, effort and body, and the parent cookie). Verify: oracle tests against `org-set-effort` and `org-capture` with the `t` template, and unit tests for `bad_effort` and the returned id/rev.
+- [x] 7.1 Implement `reschedule` and `set_deadline` (set, change, remove, same-date no-op, time and range, optional note continuation) and the repeater refusal. Verify: oracle tests for each scenario in org-item-editing's reschedule and deadline requirements, and a unit test for `repeater_unsupported`.
+- [x] 7.2 Implement `add_note` (single and multi-line) and `set_tags` (validation, org's column-77 alignment, long headline, remove). Verify: oracle tests for the note, aligned tags, long-headline tags and tag removal, and a unit test for `unknown_tag`.
+- [x] 7.3 Implement `set_effort` (set, replace, remove, drawer creation under the planning line, `bad_effort`, warning off the preferred list) and `add_item` (capture-equivalent placement under the inbox heading or a parent, CREATED, optional tags, planning, effort and body, and the parent cookie). Verify: oracle tests against `org-set-effort` and `org-capture` with the `t` template, and unit tests for `bad_effort` and the returned id/rev.
 
 ## 8. Batch and dry run
 
