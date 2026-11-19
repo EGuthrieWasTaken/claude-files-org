@@ -156,3 +156,18 @@ def test_readme_documents_exactly_the_registered_tools(api):
     documented |= {n for line in re.findall(r"^### (`org_[a-z_]+` and `org_[a-z_]+`)", readme, re.M)
                    for n in re.findall(r"org_[a-z_]+", line)}
     assert documented == set(api.tools)
+
+
+def test_deployment_commands_in_the_readme_are_the_ones_ci_runs():
+    import pathlib
+    import re
+    root = pathlib.Path(__file__).parent.parent
+    readme = (root / "README.md").read_text()
+    section = readme[readme.index("## Deployment"):]
+    commands = [ln.strip() for block in re.findall(r"```bash\n(.*?)```", section, re.S) for ln in block.splitlines()
+                if ln.strip()]
+    assert commands
+    ran = "\n".join((root / p).read_text() for p in (".github/workflows/ci.yml", ".github/workflows/release.yml"))
+    ran = ran.replace('"$TAG"', "v0.1.0")
+    for cmd in commands:
+        assert cmd in ran, f"README runs {cmd!r}, which no workflow runs"

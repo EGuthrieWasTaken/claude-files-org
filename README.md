@@ -102,3 +102,43 @@ Example: `org_archive(id, rev)`.
 `older_than_days` (default 30): archives closed top-level items under the inbox heading closed more than that
 many days ago with no open descendants. Returns `archived` and `skipped` (with `reason`: `open_descendants`,
 `no_closed_date`, `too_recent`). Example: `org_archive_closed(older_than_days=30, dry_run=true)`.
+
+## Deployment
+
+The image `ghcr.io/eguthriewastaken/claude-files-org` is built `FROM ghcr.io/eguthriewastaken/claude-files:1.4.0`
+and is a drop-in replacement for the Emacs Files container: same port, env vars, tokens, `/mcp` path and
+volumes; the `org_*` tools are loaded through `EXTRA_TOOL_MODULES=claude_files_org`. Optional `ORG_*`
+settings are described above.
+
+**Prerequisites**
+
+- The base image `ghcr.io/eguthriewastaken/claude-files` is public, so CI pulls it without logging in. If it
+  is ever made private, CI fails with a message naming the image.
+- `claude-files-org` is private. The host that runs it needs to pull it: make the package public (GitHub >
+  Packages > claude-files-org > Package settings), or log the host in to GHCR with a token that can read it.
+
+**Check a build before releasing.** `tests/container_smoke.sh` builds the image and runs it with
+`--read-only --tmpfs /tmp --cap-drop ALL --security-opt no-new-privileges` and a bind-mounted folder, then
+checks `/health`, `tools/list`, `org_list_items`, a dry run, a real edit on disk and a read-only token's
+refusal:
+
+```bash
+tests/container_smoke.sh
+```
+
+**Release.** Every pull request needs a `__version__` that has never been released (CI runs the first command
+below), and publishing a GitHub release `vX.Y.Z` runs the second, builds `linux/amd64` and `linux/arm64`, and
+pushes `:X.Y.Z` plus `:latest` (not for pre-releases):
+
+```bash
+.github/scripts/check-version.sh pr
+.github/scripts/check-version.sh release v0.1.0
+```
+
+**Swap the image.** In the Emacs Files container's settings change the Repository from
+`ghcr.io/eguthriewastaken/claude-files:latest` to `ghcr.io/eguthriewastaken/claude-files-org:latest`, keeping
+every other setting. Verify that `tools/list` shows the `org_*` tools and that `org_list_items` returns the
+open items (`get_folder_info` lists the module under `extensions`).
+
+**Roll back.** Set the Repository back to `ghcr.io/eguthriewastaken/claude-files:latest`. The tools store
+nothing outside the org files, so nothing else needs undoing.

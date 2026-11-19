@@ -58,12 +58,12 @@ Implementation order for `add-org-tools`. Work on branch `claude/add-org-tools`,
 
 ## 11. Image
 
-- [ ] 11.1 Write the `Dockerfile` per design.md Decision 8, plus `tests/container_smoke.sh`, which builds the image, runs it with production hardening flags and a fixture folder, and checks: `tools/list` includes `org_*`; `org_list_items`; a dry run; a real edit visible on disk; an ro-token refusal; health OK. Verify: the script passes locally (the base image can come from a local `docker build` of claude-files `v1.3.0` tagged as the GHCR name when GHCR is not reachable).
-- [ ] 11.2 Document deployment in `README.md`: the prerequisites (GHCR access for CI and for the host), the image swap for the Emacs Files container, verification and rollback (design.md Migration Plan). Verify: every command in the section is the same one the smoke test or the release workflow runs.
+- [x] 11.1 Write the `Dockerfile` per design.md Decision 8, plus `tests/container_smoke.sh`, which builds the image, runs it with production hardening flags and a fixture folder, and checks: `tools/list` includes `org_*`; `org_list_items`; a dry run; a real edit visible on disk; an ro-token refusal; health OK. Verify: the script passes locally (the base image can come from a local `docker build` of claude-files `v1.3.0` tagged as the GHCR name when GHCR is not reachable).
+- [x] 11.2 Document deployment in `README.md`: the prerequisites (GHCR access for CI and for the host), the image swap for the Emacs Files container, verification and rollback (design.md Migration Plan). Verify: every command in the section is the same one the smoke test or the release workflow runs.
 
 ## 12. CI and release
 
-- [ ] 12.1 Add `.github/workflows/ci.yml` with these jobs:
+- [x] 12.1 Add `.github/workflows/ci.yml` with these jobs:
   - unit + oracle on `ubuntu-24.04` with `emacs-nox`;
   - in-process integration, extracting `/srv/app` from `ghcr.io/eguthriewastaken/claude-files:1.4.0` (public, no login needed), failing with a message naming the image if the pull is denied;
   - container smoke;
