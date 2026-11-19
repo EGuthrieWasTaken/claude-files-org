@@ -12,10 +12,10 @@ context: |
 operations:
   apply:
     guidance:
-      - Work only in this repository, on branch claude/add-org-tools. Never push to main, never merge, never publish a release or deploy.
-      - Do not change the claude-files repository or the Emacs repository. The Emacs Files connector is read-only for this work. Allowed: request_download of org-projects/inbox.org and org-projects/archive/inbox.org_archive into the session scratchpad for the opt-in round-trip test. Never write through it.
-      - Never commit, paste into a PR, or upload real org content. Fixtures are synthetic.
-      - Commit after each task group with that group's tests passing. Never skip, disable or loosen a test to get green.
-      - If the oracle disagrees with a literal format in a spec scenario, match the oracle and list the discrepancy in the PR description; do not edit the specs.
-      - If blocked by something outside the repository (GHCR access, network), finish everything else, and say exactly what is blocked and the fix in the PR description.
-      - Version stays 0.1.0 for this change.
+      - "Work only in this repository, on branch claude/add-org-tools. Never push to main, never merge, never publish a release or deploy."
+      - "Do not change the claude-files repository or the Emacs repository. The Emacs Files connector is read-only for this work. Allowed: request_download of org-projects/inbox.org and org-projects/archive/inbox.org_archive into the session scratchpad for the opt-in round-trip test. Never write through it."
+      - "Never commit, paste into a PR, or upload real org content. Fixtures are synthetic."
+      - "Commit after each task group with that group's tests passing. Never skip, disable or loosen a test to get green."
+      - "If the oracle disagrees with a literal format in a spec scenario, match the oracle and list the discrepancy in the PR description; do not edit the specs."
+      - "If blocked by something outside the repository (GHCR access, network), finish everything else, and say exactly what is blocked and the fix in the PR description."
+      - "Version stays 0.1.0 for this change."
