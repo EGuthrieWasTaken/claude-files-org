@@ -1,0 +1,20 @@
+* Tasks
+** DONE with logbook
+CLOSED: [2026-10-01 Thu 09:00]
+:LOGBOOK:
+- State "DONE"       from "TODO"       [2026-10-01 Thu 09:00] \\
+  finished
+:END:
+Body text kept.
+** DONE with props and logbook
+CLOSED: [2026-10-01 Thu 09:00]
+:PROPERTIES:
+:CREATED:  [2026-09-01 Tue 09:00]
+:Effort:   1:00
+:END:
+:LOGBOOK:
+- Note taken on [2026-09-02 Wed 09:00] \\
+  hi
+:END:
+** DONE no planning
+** DONE not at all closed? no, tagged :stephen:

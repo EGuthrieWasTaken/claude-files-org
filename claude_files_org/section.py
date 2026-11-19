@@ -219,9 +219,13 @@ class Section:
 
 
     # -- properties --------------------------------------------------------
-    def set_property(self, key, value):
-        """``org-set-property``: add or replace ``:KEY:   value`` in the property drawer (created if needed)."""
-        formatted = f"{':' + key + ':':<10} {value}"
+    def set_property(self, key, value, padded=True):
+        """Add or replace a property in the drawer (created if needed).
+
+        ``padded`` writes ``:Effort:   0:30`` (org-set-property, ``%-10s %s``); otherwise ``:KEY: value``
+        as ``org-entry-put`` does for the archive properties.
+        """
+        formatted = f"{':' + key + ':':<10} {value}" if padded else f":{key}: {value}"
         span = self.props_span()
         if span:
             a, b = span

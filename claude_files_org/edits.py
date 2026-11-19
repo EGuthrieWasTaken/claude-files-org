@@ -398,6 +398,13 @@ OPS = {"set_state": op_set_state, "reschedule": op_reschedule, "set_deadline": o
 
 def run_oracle_op(doc, name, item, args, **_kw):
     """Run a registered operation directly on an item (used by the oracle tests and the tools)."""
+    if name == "archive":
+        from . import archive
+        rel = _kw.get("rel", "org-projects/inbox.org")
+        home = _kw.get("home")
+        arch = home / ".emacs.d" / archive.archive_rel(doc.config, rel) if home else None
+        text = arch.read_bytes().decode("utf-8", "surrogateescape") if arch is not None and arch.exists() else None
+        return execute(doc, OPS[name], item, dict(args, file_rel=rel, archive_text=text))
     if name == "add_item":
         parent = item if item is not None else default_parent(doc)
         return execute(doc, OPS[name], parent, args, check_repeater=False, check_structure=False)
@@ -411,3 +418,8 @@ def default_parent(doc):
             return it
     raise OrgError("not_found", f"inbox heading {doc.config.inbox_heading!r} not found in {doc.name}; "
                    "pass an explicit parent")
+
+
+from . import archive as _archive  # noqa: E402  (registers the archive operation; imports edits' helpers)
+
+OPS["archive"] = _archive.op_archive

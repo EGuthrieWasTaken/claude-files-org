@@ -107,6 +107,8 @@
     (if v (org-set-effort nil v) (org-delete-property "Effort"))))
 
 (defun oracle--op-archive (_args)
+  ;; org does not create the directory of a new archive file; the tool does, so create it here
+  (make-directory (expand-file-name "~/.emacs.d/org-projects/archive/") t)
   (org-archive-subtree)
   ;; save the archive buffer ourselves (save-file-p is off so the order is explicit)
   (let ((archive (expand-file-name (format "~/.emacs.d/org-projects/archive/%s_archive"

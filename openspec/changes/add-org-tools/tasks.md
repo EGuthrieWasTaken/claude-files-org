@@ -47,8 +47,8 @@ Implementation order for `add-org-tools`. Work on branch `claude/add-org-tools`,
 
 ## 9. Archiving
 
-- [ ] 9.1 Implement single-item archive: the closed and no-open-descendant checks, level shift, archive properties (including `ARCHIVE_ITAGS`, appended to an existing drawer), `ARCHIVE_FILE` from `ORG_EMACS_ROOT`, archive file and directory creation with org's header, and the parent cookie update. Verify: oracle tests against `org-archive-subtree` for a closed project, a subtask with inherited tags, an item with an existing property drawer, and a first archive (header), with `ARCHIVE_TIME` masked; plus unit tests for `open_descendants` and `not_closed`.
-- [ ] 9.2 Implement `archive_closed` (older-than-N-days by CLOSED date in `ORG_TIMEZONE`, top-level under the inbox heading, skipped list with reasons, one write per file, dry run). Verify: unit tests for the monthly-cleanup, no-CLOSED-date and dry-run scenarios.
+- [x] 9.1 Implement single-item archive: the closed and no-open-descendant checks, level shift, archive properties (including `ARCHIVE_ITAGS`, appended to an existing drawer), `ARCHIVE_FILE` from `ORG_EMACS_ROOT`, archive file and directory creation with org's header, and the parent cookie update. Verify: oracle tests against `org-archive-subtree` for a closed project, a subtask with inherited tags, an item with an existing property drawer, and a first archive (header), with `ARCHIVE_TIME` masked; plus unit tests for `open_descendants` and `not_closed`.
+- [x] 9.2 Implement `archive_closed` (older-than-N-days by CLOSED date in `ORG_TIMEZONE`, top-level under the inbox heading, skipped list with reasons, one write per file, dry run). Verify: unit tests for the monthly-cleanup, no-CLOSED-date and dry-run scenarios.
 
 ## 10. MCP tools
 

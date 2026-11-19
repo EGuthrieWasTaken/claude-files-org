@@ -57,3 +57,19 @@ def make_service(cfg):
         store = MemoryStore(files)
         return OrgService(config or cfg, store), store
     return _make
+
+
+class DirStore:
+    """A Vault stand-in over a real directory (creates parent directories on write)."""
+
+    def __init__(self, root):
+        self.root = root
+
+    def read(self, path):
+        p = self.root / path
+        return p.read_bytes() if p.exists() else None
+
+    def write(self, path, data):
+        p = self.root / path
+        p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_bytes(data)
