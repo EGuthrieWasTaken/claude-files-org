@@ -24,7 +24,7 @@
   <Category>Productivity: Tools: Utilities:</Category>
   <WebUI>http://[IP]:[PORT:8080]/docs</WebUI>
   <TemplateURL/>
-  <Icon/>
+  <Icon>https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/emacs.png</Icon>
   <ExtraParams>--read-only --tmpfs /tmp:rw,noexec,nosuid,nodev,size=64m --cap-drop ALL --security-opt no-new-privileges:true --pids-limit 200 --memory 512m --user 99:100</ExtraParams>
   <PostArgs/>
   <CPUset/>
