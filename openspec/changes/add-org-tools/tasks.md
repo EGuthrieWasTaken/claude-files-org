@@ -43,7 +43,7 @@ Implementation order for `add-org-tools`. Work on branch `claude/add-org-tools`,
 
 ## 8. Batch and dry run
 
-- [ ] 8.1 Implement all-or-nothing batches (ordered ops on one file, one write, combined diff, failing op index and reason) and `dry_run` for every edit. Verify: unit tests for the weekly-rebalance and one-stale-edit scenarios, and that a dry run leaves the file's sha256 unchanged.
+- [x] 8.1 Implement all-or-nothing batches (ordered ops on one file, one write, combined diff, failing op index and reason) and `dry_run` for every edit. Verify: unit tests for the weekly-rebalance and one-stale-edit scenarios, and that a dry run leaves the file's sha256 unchanged.
 
 ## 9. Archiving
 
