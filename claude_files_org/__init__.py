@@ -3,9 +3,4 @@
 __version__ = "0.1.0"
 REQUIRES_API = 1
 
-INSTRUCTIONS = "Org tools are not registered yet."
-
-
-def register(api):
-    """Register the org_* tools with the host server. Nothing yet."""
-    return None
+from .tools import INSTRUCTIONS, register  # noqa: E402,F401

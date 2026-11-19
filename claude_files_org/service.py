@@ -115,7 +115,14 @@ class OrgService:
 
     def edit_one(self, op, item_id, rev, file=None, dry_run=False, **args):
         spec = {"op": op, "id": item_id, "rev": rev, **args}
-        out = self.edit([spec], file=file, dry_run=dry_run)
+        try:
+            out = self.edit([spec], file=file, dry_run=dry_run)
+        except OrgError as e:           # a single edit is not "edit 1" of anything
+            prefix = f"edit 1 ({op}): "
+            extra = {k: v for k, v in e.extra.items() if k != "failed_edit"}
+            raise OrgError(e.code, e.message.replace(prefix, "", 1), **extra) from None
+        except ValueError as e:
+            raise ValueError(str(e).replace(f"edit 1 ({op}): ", "", 1).replace("edit 1: ", "", 1)) from None
         r = out["results"][0]
         out["id"], out["rev"] = r["id"], r["rev"]
         return out
