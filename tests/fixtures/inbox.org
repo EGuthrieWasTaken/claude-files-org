@@ -1,0 +1,62 @@
+#+TODO: TODO(t) STARTED(s) WAIT(w@) | DONE(d) CANCELLED(c@)
+#+STARTUP: overview
+
+* Tasks
+** TODO alpha                                              :stephen:research:
+SCHEDULED: <2026-11-13 Fri> DEADLINE: <2026-11-20 Fri 9:30>
+:PROPERTIES:
+:Effort:   0:45
+:END:
+:LOGBOOK:
+- Rescheduled from "[2026-11-06 Fri]" on [2026-11-09 Mon 10:00]
+:END:
+Notes about alpha.
+Second body line.
+** TODO beta [0/2]                                                  :stephen:
+*** TODO b1
+SCHEDULED: <2026-11-16 Mon>
+*** TODO b2
+** TODO gamma with no planning
+** DONE delta
+CLOSED: [2026-10-01 Thu 12:00] SCHEDULED: <2026-09-30 Wed>
+:PROPERTIES:
+:Effort:   1:00
+:END:
+** Midterm 1
+<2026-12-03 Thu 18:30-20:00>
+** TODO Final Exam
+DEADLINE: <2026-12-15 Tue>
+** TODO Final Exam
+SCHEDULED: <2026-12-14 Mon>
+** TODO blog about the thing                                           :blog:
+** TODO epsilon [50%]
+*** DONE e1
+CLOSED: [2026-11-10 Tue 08:00]
+*** TODO e2
+** TODO a headline that is deliberately very long so that the tags cannot be aligned at column 77 any more :admin:
+** STARTED zeta
+:PROPERTIES:
+:CREATED:  [2026-11-02 Mon 09:15]
+:END:
+Body after drawer.
+** WAIT eta
+SCHEDULED: <2026-11-25 Wed>
+:LOGBOOK:
+- State "WAIT"       from "TODO"       [2026-11-12 Thu 14:00] \\
+  Waiting for the data.
+:END:
+** CANCELLED theta
+CLOSED: [2026-09-15 Tue 10:00]
+:LOGBOOK:
+- State "CANCELLED"  from "TODO"       [2026-09-15 Tue 10:00] \\
+  No longer needed.
+:END:
+** TODO iota with src block
+#+BEGIN_SRC org
+* not a headline
+** neither is this
+#+END_SRC
+
+** TODO kappa
+* Reference
+Plain text under another top-level heading.

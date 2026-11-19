@@ -1,0 +1,5 @@
+* Tasks
+** TODO windows item
+SCHEDULED: <2026-11-13 Fri>
+** DONE other
+CLOSED: [2026-11-01 Sun 10:00]

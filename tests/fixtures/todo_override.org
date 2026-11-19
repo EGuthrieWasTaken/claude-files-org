@@ -1,0 +1,6 @@
+#+TODO: TODO NEXT | DONE
+* Tasks
+** NEXT upcoming thing
+** WAIT not a keyword here
+** DONE finished
+CLOSED: [2026-11-01 Sun 10:00]

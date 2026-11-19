@@ -4,8 +4,8 @@ Implementation order for `add-org-tools`. Work on branch `claude/add-org-tools`,
 
 ## 1. Scaffolding
 
-- [ ] 1.1 Create the `claude_files_org/` package with `__init__.py` (`__version__ = "0.1.0"`, `REQUIRES_API = 1`, a placeholder `INSTRUCTIONS`, and a `register(api)` that adds nothing yet), plus `requirements-dev.txt` (`pytest`), `pyproject.toml` pytest settings, a Python `.gitignore` and a `tests/` tree. Verify: `python -c "import claude_files_org"` succeeds and `pytest` exits 0 (no tests yet is fine).
-- [ ] 1.2 Add `tests/fixtures/`: synthetic org files covering every shape in design.md Decision 4. Verify: each file opens in `emacs --batch -Q` with org-mode and `org-element-parse-buffer` raises no error.
+- [x] 1.1 Create the `claude_files_org/` package with `__init__.py` (`__version__ = "0.1.0"`, `REQUIRES_API = 1`, a placeholder `INSTRUCTIONS`, and a `register(api)` that adds nothing yet), plus `requirements-dev.txt` (`pytest`), `pyproject.toml` pytest settings, a Python `.gitignore` and a `tests/` tree. Verify: `python -c "import claude_files_org"` succeeds and `pytest` exits 0 (no tests yet is fine).
+- [x] 1.2 Add `tests/fixtures/`: synthetic org files covering every shape in design.md Decision 4. Verify: each file opens in `emacs --batch -Q` with org-mode and `org-element-parse-buffer` raises no error.
 
 ## 2. Configuration and timestamps
 

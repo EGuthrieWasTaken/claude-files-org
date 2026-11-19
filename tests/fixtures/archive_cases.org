@@ -1,0 +1,23 @@
+* Tasks
+** TODO beta [1/2]                                                  :stephen:
+*** DONE b1
+CLOSED: [2026-11-05 Thu 10:00]
+*** TODO b2
+** DONE closed project
+CLOSED: [2026-09-20 Sun 10:00]
+*** DONE c1
+CLOSED: [2026-09-19 Sat 10:00]
+*** CANCELLED c2
+CLOSED: [2026-09-19 Sat 11:00]
+** DONE with effort
+CLOSED: [2026-10-01 Thu 09:00]
+:PROPERTIES:
+:Effort:   0:30
+:END:
+** DONE recent
+CLOSED: [2026-12-10 Thu 09:00]
+** DONE no closed line
+** DONE old with open child
+CLOSED: [2026-09-01 Tue 09:00]
+*** TODO child still open
+** TODO still open
