@@ -32,8 +32,8 @@ Implementation order for `add-org-tools`. Work on branch `claude/add-org-tools`,
 
 ## 6. Edit engine and state changes
 
-- [ ] 6.1 Implement the edit engine: line-range replacements within one item's section, rendering, the runtime diff guard (design.md Decision 2), the `rev` check returning `stale` with current state, `unsafe_structure` detection for the target, and unified diff output. Verify: unit tests for `stale`, `unsafe_structure` and an `internal_error` case forced by a deliberately out-of-range replacement.
-- [ ] 6.2 Implement `set_state`: add CLOSED on closing, remove CLOSED on reopening, require notes for `@` keywords, place logbook entries (newest first, drawer creation position), reject unknown keywords, and update parent cookies. Verify: oracle tests for DONE (with and without a planning line), CANCELLED with a note, WAIT with a note, reopen, and child-closes-cookie, plus unit tests for `note_required` and `unknown_keyword`.
+- [x] 6.1 Implement the edit engine: line-range replacements within one item's section, rendering, the runtime diff guard (design.md Decision 2), the `rev` check returning `stale` with current state, `unsafe_structure` detection for the target, and unified diff output. Verify: unit tests for `stale`, `unsafe_structure` and an `internal_error` case forced by a deliberately out-of-range replacement.
+- [x] 6.2 Implement `set_state`: add CLOSED on closing, remove CLOSED on reopening, require notes for `@` keywords, place logbook entries (newest first, drawer creation position), reject unknown keywords, and update parent cookies. Verify: oracle tests for DONE (with and without a planning line), CANCELLED with a note, WAIT with a note, reopen, and child-closes-cookie, plus unit tests for `note_required` and `unknown_keyword`.
 
 ## 7. Schedule, deadline, notes, tags, effort and new items
 

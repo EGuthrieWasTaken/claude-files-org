@@ -1,0 +1,33 @@
+* Tasks
+** TODO bare heading, then next heading
+** TODO planning only
+SCHEDULED: <2026-11-13 Fri>
+** TODO planning and props only
+SCHEDULED: <2026-11-13 Fri>
+:PROPERTIES:
+:Effort:   0:30
+:END:
+** TODO props only
+:PROPERTIES:
+:Effort:   0:30
+:END:
+** TODO body follows
+SCHEDULED: <2026-11-13 Fri>
+Some body text.
+** TODO blank line follows
+SCHEDULED: <2026-11-13 Fri>
+
+** TODO blank then body
+
+body after blank
+** TODO has other drawer
+:NOTES:
+x
+:END:
+** TODO deadline only
+DEADLINE: <2026-11-20 Fri>
+** DONE closed only
+CLOSED: [2026-11-01 Sun 09:00]
+** DONE closed and scheduled and deadline
+CLOSED: [2026-11-01 Sun 09:00] SCHEDULED: <2026-10-30 Fri> DEADLINE: <2026-10-31 Sat>
+** TODO last item, bare
