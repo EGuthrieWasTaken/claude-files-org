@@ -1,0 +1,187 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>claude-files-org</Name>
+  <Repository>ghcr.io/eguthriewastaken/claude-files-org:latest</Repository>
+  <Registry>https://github.com/eguthriewastaken/claude-files-org/pkgs/container/claude-files-org</Registry>
+  <Network>bridge</Network>
+  <MyIP/>
+  <Shell>sh</Shell>
+  <Privileged>false</Privileged>
+  <Support/>
+  <Project/>
+  <Overview>
+    REST file API confined to a single shared folder, with org-aware MCP
+    tools (org_list_items, org_add_item, org_batch, ...) layered on top of
+    the base claude-files image. Drop-in replacement for the claude-files
+    container: same port, tokens, /mcp path and volumes -- just point it at
+    an org-mode folder and set the ORG_* variables below if your setup
+    differs from the defaults.
+
+    IMPORTANT: the host path below must point at the SUBFOLDER you want to
+    expose, never at the repository root. That bind mount is the security
+    boundary.
+  </Overview>
+  <Category>Productivity: Tools: Utilities:</Category>
+  <WebUI>http://[IP]:[PORT:8080]/docs</WebUI>
+  <TemplateURL/>
+  <Icon/>
+  <ExtraParams>--read-only --tmpfs /tmp:rw,noexec,nosuid,nodev,size=64m --cap-drop ALL --security-opt no-new-privileges:true --pids-limit 200 --memory 512m --user 99:100</ExtraParams>
+  <PostArgs/>
+  <CPUset/>
+  <DateInstalled/>
+  <DonateText/>
+  <DonateLink/>
+  <Requires/>
+
+  <Config Name="WebUI Port" Target="8080" Default="8080" Mode="tcp"
+          Description="Port the API listens on."
+          Type="Port" Display="always" Required="true" Mask="false">8080</Config>
+
+  <Config Name="Shared Folder" Target="/data" Default="" Mode="rw"
+          Description="HOST PATH OF THE SUBFOLDER TO EXPOSE. Point this at the subfolder only, e.g. /mnt/user/appdata/repos/myrepo/shared -- never at the repo root. Everything above this path is invisible to the container."
+          Type="Path" Display="always" Required="true" Mask="false"></Config>
+
+  <Config Name="API Token" Target="API_TOKEN" Default="" Mode=""
+          Description="Bearer token for full read/write access. Generate with: openssl rand -hex 32"
+          Type="Variable" Display="always" Required="true" Mask="true"></Config>
+
+  <Config Name="Read-only API Token" Target="API_TOKEN_READONLY" Default="" Mode=""
+          Description="Optional second token that can list and download but not write or delete."
+          Type="Variable" Display="always" Required="false" Mask="true"></Config>
+
+  <Config Name="Max Upload Bytes" Target="MAX_UPLOAD_BYTES" Default="268435456" Mode=""
+          Description="Largest accepted upload, in bytes. Default 256 MiB."
+          Type="Variable" Display="advanced" Required="false" Mask="false">268435456</Config>
+
+  <Config Name="Denied Names" Target="DENIED_NAMES" Default=".git,.gitmodules,.ssh" Mode=""
+          Description="Comma-separated path components that are always refused, at any depth."
+          Type="Variable" Display="advanced" Required="false" Mask="false">.git,.gitmodules,.ssh</Config>
+
+  <Config Name="Allow Delete" Target="ALLOW_DELETE" Default="true" Mode=""
+          Description="Set to false to make the API append/replace-only."
+          Type="Variable" Display="advanced" Required="false" Mask="false">true</Config>
+
+  <Config Name="Allow Hardlinked Files" Target="ALLOW_HARDLINKED_FILES" Default="false" Mode=""
+          Description="Leave false. When false, files with more than one hard link are refused, because such a file can alias content outside the shared folder."
+          Type="Variable" Display="advanced" Required="false" Mask="false">false</Config>
+
+  <Config Name="Enable Docs" Target="ENABLE_DOCS" Default="true" Mode=""
+          Description="Serve OpenAPI docs at /docs and /openapi.json."
+          Type="Variable" Display="advanced" Required="false" Mask="false">true</Config>
+
+  <Config Name="Rate Limit Per Minute" Target="RATE_LIMIT_PER_MINUTE" Default="600" Mode=""
+          Description="Requests per minute across all clients. 0 disables."
+          Type="Variable" Display="advanced" Required="false" Mask="false">600</Config>
+
+  <Config Name="Require Mount" Target="REQUIRE_MOUNT" Default="true" Mode=""
+          Description="Refuse to start if the shared folder is not actually mounted. Leave true: it turns a typo in the host path into a loud failure instead of uploads that silently vanish with the container."
+          Type="Variable" Display="advanced" Required="false" Mask="false">true</Config>
+
+  <Config Name="Enable MCP Connector" Target="ENABLE_MCP" Default="true" Mode=""
+          Description="Mount /mcp so this service can be added once as a claude.ai / Cowork custom connector, authenticated with the same API Token above (sent as an X-API-Key header). Set false to disable it without rebuilding the image."
+          Type="Variable" Display="always" Required="false" Mask="false">true</Config>
+
+  <Config Name="MCP Public Hostname" Target="MCP_PUBLIC_HOSTNAME" Default="" Mode=""
+          Description="This container's public hostname as reached through your reverse proxy / tunnel, e.g. claude-files.example.dev. Allow-lists that Host header for the MCP SDK's DNS-rebinding guard. Left blank, that guard is disabled instead of 421ing every real request -- /mcp is still gated by the API Token either way."
+          Type="Variable" Display="always" Required="false" Mask="false"></Config>
+
+  <Config Name="MCP Inline Limit (chars)" Target="MCP_INLINE_LIMIT_CHARS" Default="100000" Mode=""
+          Description="read_file's inline text budget, in characters. A file over this comes back as a preview + truncation note pointing at the REST download endpoint instead of the full text."
+          Type="Variable" Display="advanced" Required="false" Mask="false">100000</Config>
+
+  <Config Name="MCP Base64 Limit (bytes)" Target="MCP_BASE64_LIMIT_BYTES" Default="8192" Mode=""
+          Description="write_file's single-shot cap on source bytes when encoding=base64. Advisory -- the real ceiling is whatever a caller can emit in one tool call. Over this, write_file refuses and names begin_write/write_chunk/commit_write for a file that size. Default 8 KiB."
+          Type="Variable" Display="advanced" Required="false" Mask="false">8192</Config>
+
+  <Config Name="MCP Upload Session TTL (seconds)" Target="MCP_UPLOAD_SESSION_TTL_SECONDS" Default="900" Mode=""
+          Description="Idle timeout for a begin_write chunked-upload session, reaped lazily on the next begin_write/write_chunk call rather than by a background task."
+          Type="Variable" Display="advanced" Required="false" Mask="false">900</Config>
+
+  <Config Name="MCP Max Concurrent Uploads" Target="MCP_MAX_CONCURRENT_UPLOADS" Default="8" Mode=""
+          Description="Cap on open chunked-upload sessions at once. begin_write refuses beyond this and names abort_write."
+          Type="Variable" Display="advanced" Required="false" Mask="false">8</Config>
+
+  <Config Name="MCP Upload Chunk Advisory (bytes)" Target="MCP_UPLOAD_CHUNK_ADVISORY_BYTES" Default="3072" Mode=""
+          Description="Suggested chunk size for write_chunk, reported by begin_write and get_folder_info. Advisory only -- not enforced."
+          Type="Variable" Display="advanced" Required="false" Mask="false">3072</Config>
+
+  <!-- Git tools (docs/plan-mcp-git-ops.md). Off by default. To use them, add
+       the three Path entries described in the README ("Git tools": repo root
+       read-only, .git, and the shared folder), and point Shared Folder's
+       container path at /repo/<folder> via DATA_ROOT. -->
+  <Config Name="Enable Git Read Tools" Target="ENABLE_GIT_READ" Default="false" Mode=""
+          Description="git_status, git_log, git_diff. Work with the read-only token."
+          Type="Variable" Display="advanced" Required="false" Mask="false">false</Config>
+
+  <Config Name="Enable Git Write Tools" Target="ENABLE_GIT_WRITE" Default="false" Mode=""
+          Description="git_commit, git_pull, git_push, git_merge, git_fetch. Need the read-write token. Nothing is committed or pushed automatically."
+          Type="Variable" Display="advanced" Required="false" Mask="false">false</Config>
+
+  <Config Name="Git Repo Root (container path)" Target="GIT_REPO_ROOT" Default="" Mode=""
+          Description="Where the repository root is mounted in the container (e.g. /repo). Leave empty if the shared folder IS the repository root."
+          Type="Variable" Display="advanced" Required="false" Mask="false"></Config>
+
+  <Config Name="Git Remote" Target="GIT_REMOTE" Default="origin" Mode=""
+          Description="The only remote ever fetched from or pushed to."
+          Type="Variable" Display="advanced" Required="false" Mask="false">origin</Config>
+
+  <Config Name="Git Branch" Target="GIT_BRANCH" Default="" Mode=""
+          Description="The only branch ever committed to or pushed. Empty = the branch checked out at startup."
+          Type="Variable" Display="advanced" Required="false" Mask="false"></Config>
+
+  <Config Name="Git SSH Key (container path)" Target="SSH_KEY_PATH" Default="" Mode=""
+          Description="Deploy key file, mounted read-only OUTSIDE the repository. Use a key scoped to this one repo."
+          Type="Variable" Display="advanced" Required="false" Mask="false"></Config>
+
+  <Config Name="Git known_hosts (container path)" Target="SSH_KNOWN_HOSTS_PATH" Default="" Mode=""
+          Description="REQUIRED with an SSH key: pins the remote's host key. This container never trusts a host key on first use."
+          Type="Variable" Display="advanced" Required="false" Mask="false"></Config>
+
+  <Config Name="Git HTTPS Token" Target="GIT_TOKEN" Default="" Mode=""
+          Description="Token for an https:// remote, instead of an SSH key. Never written to disk or put in a command line."
+          Type="Variable" Display="advanced" Required="false" Mask="true"></Config>
+
+  <Config Name="Pull Outside Scope" Target="GIT_PULL_OUTSIDE_SCOPE" Default="false" Mode=""
+          Description="Let pulls bring REMOTE content into files outside the shared folder. Needs the repo root mounted read-write. The agent can never author a change outside its folder either way."
+          Type="Variable" Display="advanced" Required="false" Mask="false">false</Config>
+
+  <!-- org_* tools (claude_files_org). Defaults below mirror Ethan's own
+       config.org; every one is optional and only needs setting if your
+       org setup differs. Validated at startup: a bad value stops the
+       server with a message naming the variable. -->
+  <Config Name="Org Files" Target="ORG_FILES" Default="org-projects/inbox.org" Mode=""
+          Description="Comma-separated org file(s), relative to the shared folder, that the org_* tools operate on."
+          Type="Variable" Display="advanced" Required="false" Mask="false">org-projects/inbox.org</Config>
+
+  <Config Name="Org Inbox Heading" Target="ORG_INBOX_HEADING" Default="Tasks" Mode=""
+          Description="Heading that org_add_item files new captures under."
+          Type="Variable" Display="advanced" Required="false" Mask="false">Tasks</Config>
+
+  <Config Name="Org TODO Keywords" Target="ORG_TODO_KEYWORDS" Default="TODO STARTED WAIT(@) | DONE CANCELLED(@)" Mode=""
+          Description="org TODO keyword sequence (open keywords, |, closed keywords). (@) marks a keyword that requires a note."
+          Type="Variable" Display="advanced" Required="false" Mask="false">TODO STARTED WAIT(@) | DONE CANCELLED(@)</Config>
+
+  <Config Name="Org Tags" Target="ORG_TAGS" Default="stephen,jwa,research,coursework,admin,personal,blog" Mode=""
+          Description="Comma-separated list of valid org tags."
+          Type="Variable" Display="advanced" Required="false" Mask="false">stephen,jwa,research,coursework,admin,personal,blog</Config>
+
+  <Config Name="Org Tag Groups" Target="ORG_TAG_GROUPS" Default="personal=blog" Mode=""
+          Description="Semicolon-separated parent=child[,child] tag groups. Every tag named must also be in Org Tags."
+          Type="Variable" Display="advanced" Required="false" Mask="false">personal=blog</Config>
+
+  <Config Name="Org Effort Values" Target="ORG_EFFORT_VALUES" Default="0:15 0:30 0:45 1:00 1:30 2:00 3:00 4:00 6:00 8:00" Mode=""
+          Description="Space-separated H:MM effort values offered when creating/editing items."
+          Type="Variable" Display="advanced" Required="false" Mask="false">0:15 0:30 0:45 1:00 1:30 2:00 3:00 4:00 6:00 8:00</Config>
+
+  <Config Name="Org Archive Dir" Target="ORG_ARCHIVE_DIR" Default="org-projects/archive" Mode=""
+          Description="Directory, relative to the shared folder, that org_archive_item files completed items into."
+          Type="Variable" Display="advanced" Required="false" Mask="false">org-projects/archive</Config>
+
+  <Config Name="Org Emacs Root" Target="ORG_EMACS_ROOT" Default="~/.emacs.d" Mode=""
+          Description="Reported Emacs config path. Informational only -- does not need to exist in the container."
+          Type="Variable" Display="advanced" Required="false" Mask="false">~/.emacs.d</Config>
+
+  <Config Name="Org Timezone" Target="ORG_TIMEZONE" Default="America/Indiana/Indianapolis" Mode=""
+          Description="IANA timezone name used for scheduled/deadline timestamps and logging."
+          Type="Variable" Display="advanced" Required="false" Mask="false">America/Indiana/Indianapolis</Config>
+</Container>
