@@ -22,7 +22,7 @@ Implementation order for `add-org-tools`. Work on branch `claude/add-org-tools`,
 
 ## 4. Oracle harness
 
-- [ ] 4.1 Write `tests/oracle/`: an Emacs batch driver (an elisp file with Ethan's org settings, frozen `current-time`, and `TZ` from the test) that applies one named org command to a copy of a fixture, plus a pytest helper. The helper runs the same operation through the tool engine and asserts byte equality, masking only the `:ARCHIVE_TIME:` value. Tests are skipped with a clear reason when `emacs` is missing. Verify: a sanity oracle test (reschedule on a fixture, implemented directly in elisp vs. a hand-written expected file) passes, and `emacs --version` reports 29.3 / org 9.6.15.
+- [x] 4.1 Write `tests/oracle/`: an Emacs batch driver (an elisp file with Ethan's org settings, frozen `current-time`, and `TZ` from the test) that applies one named org command to a copy of a fixture, plus a pytest helper. The helper runs the same operation through the tool engine and asserts byte equality, masking only the `:ARCHIVE_TIME:` value. Tests are skipped with a clear reason when `emacs` is missing. Verify: a sanity oracle test (reschedule on a fixture, implemented directly in elisp vs. a hand-written expected file) passes, and `emacs --version` reports 29.3 / org 9.6.15.
 
 ## 5. Query tools logic
 
