@@ -1,0 +1,8 @@
+* Tasks
+** DONE a
+CLOSED: [2026-10-01 Thu 09:00]
+
+** DONE b
+CLOSED: [2026-10-01 Thu 09:00]
+
+** TODO c

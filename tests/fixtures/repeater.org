@@ -1,0 +1,7 @@
+* Tasks
+** TODO weekly review
+SCHEDULED: <2026-11-20 Fri +1w>
+** TODO daily from done
+DEADLINE: <2026-11-21 Sat .+1d>
+** TODO monthly catchup
+SCHEDULED: <2026-11-22 Sun ++1m>

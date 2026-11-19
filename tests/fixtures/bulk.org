@@ -1,0 +1,23 @@
+* Tasks
+** DONE old a
+CLOSED: [2026-09-01 Tue 09:00]
+** DONE old b with kids
+CLOSED: [2026-09-02 Wed 09:00]
+*** DONE kid
+CLOSED: [2026-09-02 Wed 08:00]
+** DONE old project open kid
+CLOSED: [2026-09-03 Thu 09:00]
+*** TODO kid still open
+** DONE boundary exactly
+CLOSED: [2026-11-19 Thu 09:00]
+** DONE just before
+CLOSED: [2026-11-18 Wed 23:59]
+** DONE recent
+CLOSED: [2026-12-10 Thu 09:00]
+** DONE no closed date
+** TODO open
+** CANCELLED cancelled old
+CLOSED: [2026-08-01 Sat 09:00]
+* Elsewhere
+** DONE not under inbox
+CLOSED: [2026-01-01 Thu 09:00]

@@ -1,0 +1,22 @@
+* Tasks
+** TODO odd spacing
+:PROPERTIES:
+:Effort: 1:00
+:END:
+** TODO lowercase key
+:PROPERTIES:
+:effort:    1:00
+:END:
+** TODO other props first
+:PROPERTIES:
+:CREATED:  [2026-11-02 Mon 09:15]
+:END:
+** TODO two props
+:PROPERTIES:
+:CREATED:  [2026-11-02 Mon 09:15]
+:Effort:   0:30
+:END:
+** TODO blank lines after
+SCHEDULED: <2026-11-13 Fri>
+
+

@@ -1,0 +1,81 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  unit-and-oracle:
+    name: unit + oracle (Emacs 29.3 / org 9.6.15)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install Emacs and test dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y emacs-nox shellcheck
+          python -m pip install -r requirements-dev.txt
+      - name: Oracle pin
+        run: |
+          emacs --batch -Q --eval "(progn (require 'org) (princ (format \"%s org %s\n\" emacs-version (org-version))))" | tee /dev/stderr | grep -qx "29.3 org 9.6.15"
+      - name: shellcheck
+        run: shellcheck .github/scripts/*.sh tests/*.sh
+      - name: pytest
+        run: python -m pytest -q --ignore=tests/integration
+
+  integration:
+    name: in-process integration (claude-files 1.4.0)
+    runs-on: ubuntu-24.04
+    env:
+      BASE_IMAGE: ghcr.io/eguthriewastaken/claude-files:1.4.0
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Extract the app from the pinned base image
+        run: |
+          if ! docker pull "$BASE_IMAGE"; then
+            echo "::error::cannot pull $BASE_IMAGE. It must be public (or readable by this workflow): GitHub > Packages > claude-files > Package settings > Change visibility." >&2
+            exit 1
+          fi
+          cid="$(docker create "$BASE_IMAGE")"
+          mkdir -p "$RUNNER_TEMP/claude-files"
+          docker cp "$cid:/srv/app" "$RUNNER_TEMP/claude-files/app"
+          docker rm "$cid"
+      - name: Install the host app's dependencies and pytest
+        run: |
+          python -m venv "$RUNNER_TEMP/venv"
+          "$RUNNER_TEMP/venv/bin/pip" install -r "$RUNNER_TEMP/claude-files/app/requirements.txt" -r "$RUNNER_TEMP/claude-files/app/requirements-mcp.txt" httpx -r requirements-dev.txt
+      - name: Integration tests
+        env:
+          CLAUDE_FILES_PYTHON: ${{ runner.temp }}/venv/bin/python
+        run: |
+          CLAUDE_FILES_APP="$RUNNER_TEMP/claude-files" "$RUNNER_TEMP/venv/bin/python" -m pytest -q tests/integration
+
+  container-smoke:
+    name: container smoke test
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build the image and run it as production does
+        run: tests/container_smoke.sh
+
+  version:
+    name: version check
+    runs-on: ubuntu-24.04
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+      - name: Version has never been released
+        run: .github/scripts/check-version.sh pr

@@ -1,0 +1,28 @@
+#+TODO: TODO(t) STARTED(s) WAIT(w@) | DONE(d) CANCELLED(c@)
+
+* Tasks
+** TODO alpha                                              :stephen:research:
+SCHEDULED: <2026-11-13 Fri> DEADLINE: <2026-11-20 Fri 9:30>
+:PROPERTIES:
+:Effort:   0:45
+:END:
+:LOGBOOK:
+- Rescheduled from "[2026-11-06 Fri]" on [2026-11-09 Mon 10:00]
+- State "WAIT"       from "TODO"       [2026-11-05 Thu 14:00] \\
+  Waiting for the data.
+- Note taken on [2026-11-04 Wed 09:00] \\
+  reply from Stephen on the draft
+:END:
+Body of alpha.
+** TODO beta [1/2]                                                   :stephen:
+*** DONE b1
+CLOSED: [2026-11-05 Thu 10:00]
+*** TODO b2
+** DONE delta
+CLOSED: [2026-10-01 Thu 12:00]
+** TODO overdue deadline
+DEADLINE: <2026-11-10 Tue>
+** DONE overdue but closed
+CLOSED: [2026-11-01 Sun 10:00] SCHEDULED: <2026-10-30 Fri>
+** Midterm 1
+<2026-12-03 Thu 18:30-20:00>

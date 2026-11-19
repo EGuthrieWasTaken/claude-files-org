@@ -1,0 +1,34 @@
+* Tasks
+** TODO misplaced drawer
+SCHEDULED: <2026-11-13 Fri>
+:LOGBOOK:
+- Note taken on [2026-11-10 Tue 09:00] \\
+  a note
+:END:
+:PROPERTIES:
+:Effort:   0:30
+:END:
+** TODO unclosed drawer
+:PROPERTIES:
+:Effort:   0:30
+** TODO bad timestamp
+SCHEDULED: <2026-02-11 Wed: 12:30>
+** TODO two planning lines
+SCHEDULED: <2026-11-13 Fri>
+DEADLINE: <2026-11-20 Fri>
+** TODO bad tag :urgent:
+** TODO duplicate
+** TODO duplicate
+** DONE closed with open child
+CLOSED: [2026-10-01 Thu 12:00]
+*** TODO still open
+** TODO invented logbook
+:LOGBOOK:
+- Moved to next week by an agent
+:END:
+** TODO invisible property drawer
+Some body text first.
+:PROPERTIES:
+:Effort:   0:45
+:END:
+** TODO fine
