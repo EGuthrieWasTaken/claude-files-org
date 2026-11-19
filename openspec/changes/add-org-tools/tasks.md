@@ -75,7 +75,7 @@ Implementation order for `add-org-tools`. Work on branch `claude/add-org-tools`,
 ## 13. Integration and hand-off
 
 - [x] 13.1 Run every suite from a clean checkout (unit, oracle, in-process integration, container smoke, version check), and the opt-in real-file round trip if the files were downloaded. Verify: all pass, and the counts are recorded for the PR description.
-- [ ] 13.2 Push `claude/add-org-tools` and open one PR against `main`. List what was built, the test counts, any oracle discrepancies from the specs (and how they were resolved), the CI status per job, and the remaining manual steps from design.md's Migration Plan. Verify: the PR exists, and its CI results are reported. A red job caused only by the missing GHCR access prerequisite is called out as that, not as a code failure.
+- [x] 13.2 Push `claude/add-org-tools` and open one PR against `main`. List what was built, the test counts, any oracle discrepancies from the specs (and how they were resolved), the CI status per job, and the remaining manual steps from design.md's Migration Plan. Verify: the PR exists, and its CI results are reported. A red job caused only by the missing GHCR access prerequisite is called out as that, not as a code failure.
 
 ## Workflow follow-up
 
