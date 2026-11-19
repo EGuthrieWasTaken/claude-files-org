@@ -30,7 +30,10 @@ fail() { echo "FAIL: $*" >&2; docker logs "$NAME" 2>&1 | tail -20 >&2 || true; e
 pass() { echo "PASS: $*"; }
 
 if [ -z "${SKIP_BUILD:-}" ]; then
-  docker build --network="$NETWORK" -t "$IMAGE" .
+  build_args=()
+  # buildkit rejects "--network=bridge"; the default network needs no flag
+  [ "$NETWORK" = "host" ] && build_args+=(--network host)
+  docker build "${build_args[@]}" -t "$IMAGE" .
 fi
 
 mkdir -p "$data/org-projects"
