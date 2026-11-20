@@ -157,9 +157,9 @@
           Description="Heading that org_add_item files new captures under."
           Type="Variable" Display="advanced" Required="false" Mask="false">Tasks</Config>
 
-  <Config Name="Org TODO Keywords" Target="ORG_TODO_KEYWORDS" Default="TODO STARTED WAIT(@) | DONE CANCELLED(@)" Mode=""
-          Description="org TODO keyword sequence (open keywords, |, closed keywords). (@) marks a keyword that requires a note."
-          Type="Variable" Display="advanced" Required="false" Mask="false">TODO STARTED WAIT(@) | DONE CANCELLED(@)</Config>
+  <Config Name="Org TODO Keywords" Target="ORG_TODO_KEYWORDS" Default="TODO STARTED WAIT(@) ; DONE CANCELLED(@)" Mode=""
+          Description="org TODO keyword sequence: open keywords, a semicolon, closed keywords (a | would be read by unRAID as a dropdown delimiter). (@) marks a keyword that requires a note. Example with NEXT: TODO STARTED NEXT WAIT(@) ; DONE CANCELLED(@)"
+          Type="Variable" Display="advanced" Required="false" Mask="false">TODO STARTED WAIT(@) ; DONE CANCELLED(@)</Config>
 
   <Config Name="Org Tags" Target="ORG_TAGS" Default="stephen,jwa,research,coursework,admin,personal,blog" Mode=""
           Description="Comma-separated list of valid org tags."
