@@ -75,7 +75,7 @@ def api(tmp_path, monkeypatch):
 
 
 def test_package_exposes_the_extension_contract():
-    assert org.REQUIRES_API == 1 and org.__version__ == "0.1.0"
+    assert org.REQUIRES_API == 1 and org.__version__ == "0.1.1"
     assert callable(org.register) and "org_*" in org.INSTRUCTIONS
 
 

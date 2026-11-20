@@ -73,3 +73,33 @@ def test_readme_documents_exactly_the_settings_the_module_reads():
     from claude_files_org.config import DEFAULTS
     readme = (pathlib.Path(__file__).parent.parent / "README.md").read_text()
     assert set(re.findall(r"^\| `(ORG_[A-Z_]+)`", readme, re.M)) == set(DEFAULTS)
+
+
+@pytest.mark.parametrize("text", [
+    "TODO STARTED NEXT WAIT(@) ; DONE CANCELLED(@)",
+    "TODO STARTED NEXT WAIT(@);DONE CANCELLED(@)",
+])
+def test_semicolon_is_a_separator_like_the_bar(text):
+    seq = load_config({"ORG_TODO_KEYWORDS": text}).keywords
+    assert seq.open == ("TODO", "STARTED", "NEXT", "WAIT") and seq.closed == ("DONE", "CANCELLED")
+    assert seq.note == frozenset({"WAIT", "CANCELLED"})
+
+
+def test_semicolon_and_bar_give_the_same_sequence():
+    a = load_config({"ORG_TODO_KEYWORDS": "TODO NEXT WAIT(@) | DONE"}).keywords
+    b = load_config({"ORG_TODO_KEYWORDS": "TODO NEXT WAIT(@) ; DONE"}).keywords
+    assert a == b and b.describe() == "TODO NEXT WAIT(@) | DONE"
+
+
+@pytest.mark.parametrize("text", ["TODO ; DONE ; CANCELLED", "TODO | DONE ; CANCELLED", "; DONE", "TODO ;", ";"])
+def test_misplaced_semicolons_are_refused(text):
+    with pytest.raises(ConfigError) as exc:
+        load_config({"ORG_TODO_KEYWORDS": text})
+    assert "ORG_TODO_KEYWORDS" in str(exc.value)
+
+
+def test_a_semicolon_in_a_files_own_todo_line_is_not_a_separator(cfg):
+    from claude_files_org.model import parse
+    doc = parse("#+TODO: TODO ; DONE\n* Tasks\n** TODO x\n", cfg)
+    seq = doc.keywords.sequences[0]
+    assert seq.open == ("TODO", ";") and seq.closed == ("DONE",)       # org's reading: ";" is just a word

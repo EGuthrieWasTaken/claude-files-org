@@ -61,7 +61,13 @@ def parse_keyword_sequence(text, source="ORG_TODO_KEYWORDS"):
     Fast-key letters (``(t)``) and ``!`` flags are accepted and ignored;
     ``@`` marks a keyword that requires a note. Without ``|`` the last
     keyword is the closed one, as in org.
+
+    In ``ORG_TODO_KEYWORDS`` (only) ``;`` works as the separator too, for places that cannot carry a
+    ``|`` (the unRAID template treats it as a dropdown delimiter): ``TODO NEXT ; DONE``. A file's own
+    ``#+TODO:`` line is read as org reads it, where ``;`` has no meaning.
     """
+    if source == "ORG_TODO_KEYWORDS":
+        text = text.replace(";", " | ")
     tokens = text.split()
     if not tokens:
         raise ConfigError(f"{source}: no keywords given")
